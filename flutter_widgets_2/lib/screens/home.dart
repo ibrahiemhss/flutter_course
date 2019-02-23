@@ -16,19 +16,151 @@ class Home extends StatelessWidget{
         margin: EdgeInsets.only(left:50.0,right: 50.0,top: 10.0),
         padding: EdgeInsets.all(50.0),*/
 
-        child: Text("Flight",
-            textDirection: TextDirection.ltr,
+        child:Column(
+          children: <Widget>[
+
+         Row(
+        children: <Widget>[
+
+          Expanded(child: Text("column1 row1 ",
+          textDirection: TextDirection.ltr,
+
           ///----adding custom properties for text----------
           style: TextStyle(
             //line under text
-            decoration: TextDecoration.none,
-              fontSize: 100.0,
+              decoration: TextDecoration.none,
+              fontSize: 10.0,
               fontFamily: 'Muli',
               fontWeight: FontWeight.w700,
               fontStyle: FontStyle.italic,
-              color: Colors.white
-          ),
-        ),
+              color: Colors.white),
+        )),
+          Expanded(child: Text("column1 row2 ",
+        textDirection: TextDirection.ltr,
+
+        ///----adding custom properties for text----------
+        style: TextStyle(
+          //line under text
+            decoration: TextDecoration.none,
+            fontSize: 10.0,
+            fontFamily: 'Muli',
+            fontWeight: FontWeight.w700,
+            fontStyle: FontStyle.italic,
+            color: Colors.white),
+      )),
+          Expanded(child: Text("column1 row3 ",
+        textDirection: TextDirection.ltr,
+
+        ///----adding custom properties for text----------
+        style: TextStyle(
+          //line under text
+            decoration: TextDecoration.none,
+            fontSize: 10.0,
+            fontFamily: 'Muli',
+            fontWeight: FontWeight.w700,
+            fontStyle: FontStyle.italic,
+            color: Colors.white),
+      ))
+      ],
+    ),
+
+
+         Row(
+           children: <Widget>[
+
+             Expanded(child: Text("column2 row1 ",
+               textDirection: TextDirection.ltr,
+
+               ///----adding custom properties for text----------
+               style: TextStyle(
+                 //line under text
+                   decoration: TextDecoration.none,
+                   fontSize: 10.0,
+                   fontFamily: 'Muli',
+                   fontWeight: FontWeight.w700,
+                   fontStyle: FontStyle.italic,
+                   color: Colors.white),
+             )),
+             Expanded(child: Text("column2 row2 ",
+               textDirection: TextDirection.ltr,
+
+               ///----adding custom properties for text----------
+               style: TextStyle(
+                 //line under text
+                   decoration: TextDecoration.none,
+                   fontSize: 10.0,
+                   fontFamily: 'Muli',
+                   fontWeight: FontWeight.w700,
+                   fontStyle: FontStyle.italic,
+                   color: Colors.white),
+             )),
+             Expanded(child: Text("column2 row3 ",
+               textDirection: TextDirection.ltr,
+
+               ///----adding custom properties for text----------
+               style: TextStyle(
+                 //line under text
+                   decoration: TextDecoration.none,
+                   fontSize: 10.0,
+                   fontFamily: 'Muli',
+                   fontWeight: FontWeight.w700,
+                   fontStyle: FontStyle.italic,
+                   color: Colors.white),
+             ))
+           ],
+         ),
+
+         Row(
+           children: <Widget>[
+
+             Expanded(child: Text("column3 row1 ",
+               textDirection: TextDirection.ltr,
+
+               ///----adding custom properties for text----------
+               style: TextStyle(
+                 //line under text
+                   decoration: TextDecoration.none,
+                   fontSize: 10.0,
+                   fontFamily: 'Muli',
+                   fontWeight: FontWeight.w700,
+                   fontStyle: FontStyle.italic,
+                   color: Colors.white),
+             )),
+             Expanded(child: Text("column3 row2 ",
+               textDirection: TextDirection.ltr,
+
+               ///----adding custom properties for text----------
+               style: TextStyle(
+                 //line under text
+                   decoration: TextDecoration.none,
+                   fontSize: 10.0,
+                   fontFamily: 'Muli',
+                   fontWeight: FontWeight.w700,
+                   fontStyle: FontStyle.italic,
+                   color: Colors.white),
+             )),
+             Expanded(child: Text("column3 row3 ",
+               textDirection: TextDirection.ltr,
+
+               ///----adding custom properties for text----------
+               style: TextStyle(
+                 //line under text
+                   decoration: TextDecoration.none,
+                   fontSize: 10.0,
+                   fontFamily: 'Muli',
+                   fontWeight: FontWeight.w700,
+                   fontStyle: FontStyle.italic,
+                   color: Colors.white),
+             ))
+           ],
+         ),
+
+          ],
+        )
+
+        /*----------child raw----------
+
+        //--------------------------------------------*/
       )
     );
   }

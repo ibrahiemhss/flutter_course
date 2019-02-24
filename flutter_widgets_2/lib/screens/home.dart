@@ -9,11 +9,12 @@ class Home extends StatelessWidget{
 
           alignment: Alignment.center,
           color: Colors.deepPurple,
-      ////-----margin , padding and box constraints-----------
+          padding: EdgeInsets.only(left:10.0,right: 10.0,top: 50.0),
+
+          ////-----margin , padding and box constraints-----------
         /*width: 200.0,
         height: 100.0,
         margin: EdgeInsets.all(50.0),
-        margin: EdgeInsets.only(left:50.0,right: 50.0,top: 10.0),
         padding: EdgeInsets.all(50.0),*/
 
         child:Column(
@@ -22,20 +23,20 @@ class Home extends StatelessWidget{
          Row(
         children: <Widget>[
 
-          Expanded(child: Text("column1 row1 ",
+          Expanded(child: Text("my name is  ",
           textDirection: TextDirection.ltr,
 
           ///----adding custom properties for text----------
           style: TextStyle(
             //line under text
               decoration: TextDecoration.none,
-              fontSize: 10.0,
+              fontSize: 20.0,
               fontFamily: 'Muli',
               fontWeight: FontWeight.w700,
               fontStyle: FontStyle.italic,
               color: Colors.white),
         )),
-          Expanded(child: Text("column1 row2 ",
+          Expanded(child: Text("ibrahim  ",
         textDirection: TextDirection.ltr,
 
         ///----adding custom properties for text----------
@@ -44,11 +45,9 @@ class Home extends StatelessWidget{
             decoration: TextDecoration.none,
             fontSize: 10.0,
             fontFamily: 'Muli',
-            fontWeight: FontWeight.w700,
-            fontStyle: FontStyle.italic,
             color: Colors.white),
       )),
-          Expanded(child: Text("column1 row3 ",
+          Expanded(child: Text("age  22 y ",
         textDirection: TextDirection.ltr,
 
         ///----adding custom properties for text----------
@@ -57,8 +56,6 @@ class Home extends StatelessWidget{
             decoration: TextDecoration.none,
             fontSize: 10.0,
             fontFamily: 'Muli',
-            fontWeight: FontWeight.w700,
-            fontStyle: FontStyle.italic,
             color: Colors.white),
       ))
       ],
@@ -155,14 +152,23 @@ class Home extends StatelessWidget{
            ],
          ),
 
+            FlightImageAsset()
           ],
         )
 
-        /*----------child raw----------
-
-        //--------------------------------------------*/
       )
     );
+  }
+
+}
+class FlightImageAsset extends StatelessWidget{
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    AssetImage assetImage=AssetImage("images/offers.png");
+    Image image=Image(image: assetImage,width: 250.0,height: 250.0,);
+
+    return Container(child: image,);
   }
 
 }

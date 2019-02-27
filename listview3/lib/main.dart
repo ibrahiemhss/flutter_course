@@ -10,29 +10,24 @@ void main() {
       ),
       body: getWidgetLongListItem(),
       floatingActionButton: FloatingActionButton(
-          onPressed: (){
-
-            debugPrint('added');
-
-          },
-      child: Icon(Icons.add),
-      tooltip: 'Add one More Item',
+        onPressed: () {
+          debugPrint('added');
+        },
+        child: Icon(Icons.add),
+        tooltip: 'Add one More Item',
       ),
-
     ),
   ));
 }
 
 ////show snack Bar///
-void showSnackBar(BuildContext context,String item){
-  
-  var snackBar=SnackBar(
+void showSnackBar(BuildContext context, String item) {
+  var snackBar = SnackBar(
     content: Text("you just tapped $item"),
-    action: SnackBarAction(label: "UNDO",
-        onPressed:(){
-
-      debugPrint("performing dummy UNDO operating");
-
+    action: SnackBarAction(
+        label: "UNDO",
+        onPressed: () {
+          debugPrint("performing dummy UNDO operating");
         }),
   );
   Scaffold.of(context).showSnackBar(snackBar);
@@ -40,30 +35,26 @@ void showSnackBar(BuildContext context,String item){
 
 //----------------long list item ----------------------------------------------------
 
-Widget getWidgetLongListItem(){
+Widget getWidgetLongListItem() {
+  var listItem = getLongListElements();
+  var listView = ListView.builder(itemBuilder: (context, index) {
+    return ListTile(
+      title: Text(listItem[index]),
+      leading: Icon(Icons.arrow_right),
+      onTap: () {
+        //debugPrint("${listItem[index]} was tapped");
 
-  var listItem=getLongListElements();
-  var listView = ListView.builder(
-    itemBuilder: (context,index){
-      return ListTile(
-        title: Text(listItem[index]),
-        leading: Icon(Icons.arrow_right),
-        onTap:(){
-          //debugPrint("${listItem[index]} was tapped");
-
-          showSnackBar(context,listItem[index]);
-        },
-      );
-    }
-  );
+        showSnackBar(context, listItem[index]);
+      },
+    );
+  });
   return listView;
 }
-List<String> getLongListElements(){
 
-  var items=List<String>.generate(1000, (counter)=>"item $counter");
+List<String> getLongListElements() {
+  var items = List<String>.generate(1000, (counter) => "item $counter");
   return items;
 }
-
 
 //--------------------------------------------------------------------
 Widget getListView() {

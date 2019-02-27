@@ -9,10 +9,34 @@ void main() {
         title: Text("Basic List View"),
       ),
       body: getWidgetLongListItem(),
+      floatingActionButton: FloatingActionButton(
+          onPressed: (){
+
+            debugPrint('added');
+
+          },
+      child: Icon(Icons.add),
+      tooltip: 'Add one More Item',
+      ),
+
     ),
   ));
 }
 
+////show snack Bar///
+void showSnackBar(BuildContext context,String item){
+  
+  var snackBar=SnackBar(
+    content: Text("you just tapped $item"),
+    action: SnackBarAction(label: "UNDO",
+        onPressed:(){
+
+      debugPrint("performing dummy UNDO operating");
+
+        }),
+  );
+  Scaffold.of(context).showSnackBar(snackBar);
+}
 
 //----------------long list item ----------------------------------------------------
 
@@ -25,8 +49,9 @@ Widget getWidgetLongListItem(){
         title: Text(listItem[index]),
         leading: Icon(Icons.arrow_right),
         onTap:(){
-          debugPrint("${listItem[index]} was tapped");
+          //debugPrint("${listItem[index]} was tapped");
 
+          showSnackBar(context,listItem[index]);
         },
       );
     }

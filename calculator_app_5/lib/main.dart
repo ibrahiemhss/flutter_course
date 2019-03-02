@@ -2,8 +2,13 @@ import 'package:flutter/material.dart';
 
 void main() {
   runApp(MaterialApp(
+    debugShowCheckedModeBanner: false,
     title: "Simple Calculator App",
     home: SIForm(),
+    theme: ThemeData(
+        brightness: Brightness.dark,
+        primaryColor: Colors.deepOrange,
+        accentColor: Colors.deepOrangeAccent),
   ));
 }
 
@@ -18,10 +23,11 @@ class SIForm extends StatefulWidget {
 class _SIFormState extends State<SIForm> {
   var _currencies = ['Liver', 'Dinar', 'Pounds'];
   final _minimumPadding = 5.0;
+  var _currentItemSelected = 'Liver';
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
+    TextStyle textStyle = Theme.of(context).textTheme.title;
     return Scaffold(
       //  resizeToAvoidBottomPadding: false,
       appBar: AppBar(
@@ -39,9 +45,11 @@ class _SIFormState extends State<SIForm> {
                   top: _minimumPadding, bottom: _minimumPadding),
               child: TextField(
                 keyboardType: TextInputType.number,
+                style: textStyle,
                 decoration: InputDecoration(
                     labelText: 'principal',
                     hintText: 'Enter princibal e.g 12000',
+                    labelStyle: textStyle,
                     border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10.0))),
               ),
@@ -50,9 +58,12 @@ class _SIFormState extends State<SIForm> {
               padding: EdgeInsets.only(
                   top: _minimumPadding, bottom: _minimumPadding),
               child: TextField(
+                keyboardType: TextInputType.number,
+                style: textStyle,
                 decoration: InputDecoration(
                     labelText: 'Rate of interest',
                     hintText: 'In percent',
+                    labelStyle: textStyle,
                     border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10.0))),
               ),
@@ -64,9 +75,12 @@ class _SIFormState extends State<SIForm> {
                   children: <Widget>[
                     Expanded(
                         child: TextField(
+                      keyboardType: TextInputType.number,
+                      style: textStyle,
                       decoration: InputDecoration(
                           labelText: 'Term',
                           hintText: 'Time in year',
+                          labelStyle: textStyle,
                           border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10.0))),
                     )),
@@ -81,8 +95,6 @@ class _SIFormState extends State<SIForm> {
                           child: Text(value),
                         );
                       }).toList(),
-                      // value :'Livers',
-                      onChanged: (String newValueSelcted) {},
                     ))
                   ],
                 )),
@@ -93,17 +105,30 @@ class _SIFormState extends State<SIForm> {
                 children: <Widget>[
                   Expanded(
                     child: RaisedButton(
-                        child: Text('Calculate'), onPressed: () {}),
+                        color: Theme.of(context).accentColor,
+                        textColor: Theme.of(context).primaryColorDark,
+                        child: Text('Calculate', textScaleFactor: 1.5),
+                        onPressed: () {}),
                   ),
                   Expanded(
-                    child: RaisedButton(child: Text('Reset'), onPressed: () {}),
+                    child: RaisedButton(
+                        color: Theme.of(context).primaryColorDark,
+                        textColor: Theme.of(context).primaryColorLight,
+                        child: Text(
+                          'Reset',
+                          textScaleFactor: 1.5,
+                        ),
+                        onPressed: () {}),
                   )
                 ],
               ),
             ),
             Padding(
               padding: EdgeInsets.all(_minimumPadding * 2),
-              child: Text('Todo Text'),
+              child: Text(
+                'Todo Text',
+                style: textStyle,
+              ),
             )
           ],
         ),

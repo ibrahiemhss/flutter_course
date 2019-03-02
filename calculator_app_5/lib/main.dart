@@ -23,7 +23,18 @@ class SIForm extends StatefulWidget {
 class _SIFormState extends State<SIForm> {
   var _currencies = ['Liver', 'Dinar', 'Pounds'];
   final _minimumPadding = 5.0;
-  var _currentItemSelected = 'Liver';
+  var _currentItemSelected ='';
+  @override
+  initState(){
+    _currentItemSelected = _currencies[0];
+
+  }
+
+  TextEditingController principalController = TextEditingController();
+  TextEditingController roinController = TextEditingController();
+  TextEditingController termController = TextEditingController();
+
+  var _displayResult='';
 
   @override
   Widget build(BuildContext context) {
@@ -46,6 +57,7 @@ class _SIFormState extends State<SIForm> {
               child: TextField(
                 keyboardType: TextInputType.number,
                 style: textStyle,
+                controller: principalController,
                 decoration: InputDecoration(
                     labelText: 'principal',
                     hintText: 'Enter princibal e.g 12000',
@@ -60,6 +72,7 @@ class _SIFormState extends State<SIForm> {
               child: TextField(
                 keyboardType: TextInputType.number,
                 style: textStyle,
+                controller: roinController,
                 decoration: InputDecoration(
                     labelText: 'Rate of interest',
                     hintText: 'In percent',
@@ -77,7 +90,8 @@ class _SIFormState extends State<SIForm> {
                         child: TextField(
                       keyboardType: TextInputType.number,
                       style: textStyle,
-                      decoration: InputDecoration(
+                          controller: termController,
+                          decoration: InputDecoration(
                           labelText: 'Term',
                           hintText: 'Time in year',
                           labelStyle: textStyle,
@@ -95,6 +109,10 @@ class _SIFormState extends State<SIForm> {
                           child: Text(value),
                         );
                       }).toList(),
+                      value: _currentItemSelected,
+                      onChanged: (String newValueSelcted) {
+                        _onDropDownItemSelcted(newValueSelcted);
+                      },
                     ))
                   ],
                 )),
@@ -108,7 +126,11 @@ class _SIFormState extends State<SIForm> {
                         color: Theme.of(context).accentColor,
                         textColor: Theme.of(context).primaryColorDark,
                         child: Text('Calculate', textScaleFactor: 1.5),
-                        onPressed: () {}),
+                        onPressed: () {
+                          setState(() {
+                            this._displayResult=_calculateTotalReturns();
+                          });
+                        }),
                   ),
                   Expanded(
                     child: RaisedButton(
@@ -118,7 +140,11 @@ class _SIFormState extends State<SIForm> {
                           'Reset',
                           textScaleFactor: 1.5,
                         ),
-                        onPressed: () {}),
+                        onPressed: () {
+                          setState(() {
+                            _reset();
+                          });
+                        }),
                   )
                 ],
               ),
@@ -126,7 +152,7 @@ class _SIFormState extends State<SIForm> {
             Padding(
               padding: EdgeInsets.all(_minimumPadding * 2),
               child: Text(
-                'Todo Text',
+                this._displayResult,
                 style: textStyle,
               ),
             )
@@ -147,5 +173,30 @@ class _SIFormState extends State<SIForm> {
       child: image,
       margin: EdgeInsets.all(_minimumPadding * 10),
     );
+  }
+
+  void _onDropDownItemSelcted(String newValueSelcted) {
+    setState(() {
+      this._currentItemSelected = newValueSelcted;
+    });
+  }
+
+  String _calculateTotalReturns() {
+
+    double principal=double.parse(principalController.text);
+    double rio=double.parse(roinController.text);
+    double term=double.parse(termController.text);
+
+    double totalAmountPayable=principal+(principal*rio*term)/100;
+    String result ='After $term year , your investment will be worth $totalAmountPayable $_currentItemSelected';
+    return result;
+  }
+
+  void _reset() {
+    principalController.text='';
+    roinController.text='';
+    termController.text='';
+    _displayResult='';
+    _currentItemSelected=_currencies[0];
   }
 }

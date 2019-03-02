@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 
 void main() {
-
-  runApp(
-      MaterialApp(
-        title: "Simple Calculator App",
-        home: SIForm (),
-      )
-  );
+  runApp(MaterialApp(
+    title: "Simple Calculator App",
+    home: SIForm(),
+  ));
 }
 
 class SIForm extends StatefulWidget {
@@ -20,87 +17,110 @@ class SIForm extends StatefulWidget {
 
 class _SIFormState extends State<SIForm> {
   var _currencies = ['Liver', 'Dinar', 'Pounds'];
-  final _minimumPadding=5.0;
+  final _minimumPadding = 5.0;
 
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
     return Scaffold(
+      //  resizeToAvoidBottomPadding: false,
       appBar: AppBar(
         title: Text("Simple Calculator App"),
       ),
       body: Container(
-          margin:EdgeInsets.all(_minimumPadding * 10),
-        child: Column(
+        margin: EdgeInsets.all(_minimumPadding * 2),
+        //change Column to listView to make screen scrolling
+        //  child: Column(
+        child: ListView(
           children: <Widget>[
             getImageAsset(),
-
             Padding(
-              padding: EdgeInsets.only(top: _minimumPadding,bottom: _minimumPadding),
-              child:
-            TextField(
-              decoration: InputDecoration(
-                labelText: 'principal',
-                hintText: 'Enter princibal e.g 12000',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0)
-                )
-              ) ,
-            ),),
-        Padding(
-          padding: EdgeInsets.only(top: _minimumPadding,bottom: _minimumPadding),
-          child:
-        TextField(
-              decoration: InputDecoration(
-                  labelText: 'Rate of interest',
-                  hintText: 'In percent',
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.0)
-                  )
-              ) ,
-        ),),
-
-            Row(
-              children: <Widget>[
-                Expanded (
-                    child: TextField(
-                  decoration: InputDecoration(
-                      labelText: 'Term',
-                      hintText: 'Time in year',
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10.0)
-                      )
-                  ) ,
+              padding: EdgeInsets.only(
+                  top: _minimumPadding, bottom: _minimumPadding),
+              child: TextField(
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(
+                    labelText: 'principal',
+                    hintText: 'Enter princibal e.g 12000',
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.0))),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(
+                  top: _minimumPadding, bottom: _minimumPadding),
+              child: TextField(
+                decoration: InputDecoration(
+                    labelText: 'Rate of interest',
+                    hintText: 'In percent',
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.0))),
+              ),
+            ),
+            Padding(
+                padding: EdgeInsets.only(
+                    top: _minimumPadding, bottom: _minimumPadding),
+                child: Row(
+                  children: <Widget>[
+                    Expanded(
+                        child: TextField(
+                      decoration: InputDecoration(
+                          labelText: 'Term',
+                          hintText: 'Time in year',
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10.0))),
+                    )),
+                    Container(
+                      width: _minimumPadding * 5,
+                    ),
+                    Expanded(
+                        child: DropdownButton<String>(
+                      items: _currencies.map((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                      // value :'Livers',
+                      onChanged: (String newValueSelcted) {},
+                    ))
+                  ],
                 )),
-
-                Expanded (child: DropdownButton<String>(
-
-                  items: _currencies.map((String value){
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(value),
-                    );
-
-                  }).toList(),
-                 // value :'Livers',
-                  onChanged: (String newValueSelcted){
-
-                  },
-                ))
-
-
-              ],
+            Padding(
+              padding: EdgeInsets.only(
+                  top: _minimumPadding, bottom: _minimumPadding),
+              child: Row(
+                children: <Widget>[
+                  Expanded(
+                    child: RaisedButton(
+                        child: Text('Calculate'), onPressed: () {}),
+                  ),
+                  Expanded(
+                    child: RaisedButton(child: Text('Reset'), onPressed: () {}),
+                  )
+                ],
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.all(_minimumPadding * 2),
+              child: Text('Todo Text'),
             )
           ],
         ),
       ),
     );
   }
-  Widget getImageAsset(){
-    AssetImage assetImage=AssetImage('images/money.png');
-    Image image=Image(image: assetImage,width: 125.0,height: 125.0,);
+
+  Widget getImageAsset() {
+    AssetImage assetImage = AssetImage('images/money.png');
+    Image image = Image(
+      image: assetImage,
+      width: 125.0,
+      height: 125.0,
+    );
     return Container(
-      child:
-      image,);
+      child: image,
+      margin: EdgeInsets.all(_minimumPadding * 10),
+    );
   }
 }

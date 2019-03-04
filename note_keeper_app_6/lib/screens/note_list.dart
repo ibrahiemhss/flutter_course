@@ -117,10 +117,14 @@ class NoteListState extends State<NoteList> {
       //TODO AT 7 : 38
     }
   }
-  void navigateToDetails(Note note,String title) {
-    Navigator.push(context, MaterialPageRoute(builder: (context) {
+  void navigateToDetails(Note note,String title) async {
+   bool result=  await Navigator.push(context, MaterialPageRoute(builder: (context) {
       return NoteDetails(note,title);
     }));
+
+   if(result ==  true){
+     updateList();
+   }
   }
 
 

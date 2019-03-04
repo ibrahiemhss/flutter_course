@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:note_keeper_app_6/models/note.dart';
 import 'package:note_keeper_app_6/utils/database_helper.dart';
+import 'package:intl/intl.dart';
 
 class NoteDetails extends StatefulWidget {
   final String appBarTitle;
@@ -121,6 +122,7 @@ class NoteDetailsState extends State<NoteDetails> {
                               onPressed: () {
                                 setState(() {
                                   debugPrint('Save button clicked');
+                                  _save();
                                 });
                               }),
                         ),
@@ -138,6 +140,7 @@ class NoteDetailsState extends State<NoteDetails> {
                               onPressed: () {
                                 setState(() {
                                   debugPrint('Delete button clicked');
+                                  _delete();
                                 });
                               }),
                         )
@@ -150,7 +153,7 @@ class NoteDetailsState extends State<NoteDetails> {
   }
 
   void moveToLastScreen() {
-    Navigator.pop(context);
+    Navigator.pop(context,true);
   }
 
   //Convert the String priority in the form of integer before saving it to Database
@@ -193,6 +196,10 @@ void updateTitle(){
 
 void _save() async {
 
+    moveToLastScreen();
+    var now = new DateTime.now();
+
+    note.date = DateFormat.yMMMd().format(DateTime.now());
     int result;
     if(note.id !=null){//caes 1 update operation
 
@@ -209,6 +216,34 @@ void _save() async {
 
     }
 }
+
+  void _delete() async {
+
+
+
+    moveToLastScreen();
+
+    //Case 1: if user trying to delete the New Note i.e he has come to
+    //the detail page by pressing the FAB of notelist page
+
+    if(note.id !=null){//caes 1 update operation
+
+      _showAlertDialog('Status', 'No Note was deleted');
+     return;
+    }
+    //Case 2: user is trying to delete the old note that already has a valid ID
+
+    int result = await helper.deleteNote(note.id);
+
+    if(result !=0){//success
+
+      _showAlertDialog('Status','Note Delted Successfully');
+    }else{//failed
+      _showAlertDialog('Status','Error Occured While Deleting Note');
+
+    }
+  }
+
 
   void _showAlertDialog(String title, String message) {
 

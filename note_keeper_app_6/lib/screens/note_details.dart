@@ -1,28 +1,36 @@
 import 'package:flutter/material.dart';
+import 'package:note_keeper_app_6/models/note.dart';
+import 'package:note_keeper_app_6/utils/database_helper.dart';
 
 class NoteDetails extends StatefulWidget {
-  String appBarTitle;
+  final String appBarTitle;
+  final Note note;
 
-  NoteDetails(this.appBarTitle);
+  NoteDetails(this.note,this.appBarTitle);
 
   @override
   State<StatefulWidget> createState() {
-    return NoteDetailsState(this.appBarTitle);
+    return NoteDetailsState(this.note,this.appBarTitle);
   }
 }
 
 class NoteDetailsState extends State<NoteDetails> {
   static var _priorities = ['high', 'low'];
   String appBarTitle;
+  Note note;
+  DatabaseHelper helper = DatabaseHelper();
+
   TextEditingController titleController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
 
-  NoteDetailsState(this.appBarTitle);
+  NoteDetailsState(this.note,this.appBarTitle);
 
   @override
   Widget build(BuildContext context) {
     TextStyle textStyle = Theme.of(context).textTheme.title;
 
+    titleController.text=note.title;
+    descriptionController.text=note.description;
     return WillPopScope(
         onWillPop: () {
           //todo cotrol things when user press Back
@@ -53,10 +61,11 @@ class NoteDetailsState extends State<NoteDetails> {
                         );
                       }).toList(),
                       style: textStyle,
-                      value: 'low',
+                      value: getPriorityAsString(note.priority),
                       onChanged: (valueSelectedByUser) {
                         setState(() {
                           debugPrint('User selected $valueSelectedByUser');
+                          updatePriorityAsInt(valueSelectedByUser);
                         });
                       }),
                 ),
@@ -69,6 +78,7 @@ class NoteDetailsState extends State<NoteDetails> {
                       style: textStyle,
                       onChanged: (value) {
                         debugPrint('change in title text field is ===> $value');
+                        updateTitle();
                       },
                       decoration: InputDecoration(
                           labelText: 'Title',
@@ -86,6 +96,7 @@ class NoteDetailsState extends State<NoteDetails> {
                       onChanged: (value) {
                         debugPrint(
                             'change in Description text field is ===> $value');
+                        updateDecsription();
                       },
                       decoration: InputDecoration(
                           labelText: 'Description',
@@ -140,5 +151,74 @@ class NoteDetailsState extends State<NoteDetails> {
 
   void moveToLastScreen() {
     Navigator.pop(context);
+  }
+
+  //Convert the String priority in the form of integer before saving it to Database
+void updatePriorityAsInt(String value){
+    switch (value){
+      case 'High':
+        note.priority=1;
+        break;
+      case 'Low':
+        note.priority=2;
+        break;
+    }
+}
+
+//Convert the int priority to String and display it to user in DropDown
+  String getPriorityAsString(int value){
+    String priority;
+    switch (value){
+      case 1:
+        priority=_priorities[0];
+        break;
+      case 2:
+        priority=_priorities[1];
+        break;
+    }
+    return priority;
+  }
+
+  //Update the title of Note object
+void updateTitle(){
+    note.title=titleController.text;
+}
+
+//Update the description of Note object
+  void updateDecsription(){
+    note.description=descriptionController.text;
+  }
+
+  //Save data to database
+
+void _save() async {
+
+    int result;
+    if(note.id !=null){//caes 1 update operation
+
+      result=await helper.ubdateNote(note);
+    }else{//case 2 insert operation
+      result=await helper.insertNote(note);
+
+    }
+    if(result !=0){//success
+
+      _showAlertDialog('Status','Note Saved Successfully');
+    }else{//failed
+      _showAlertDialog('Status','Proplem Saving Note');
+
+    }
+}
+
+  void _showAlertDialog(String title, String message) {
+
+    AlertDialog alertDialog=AlertDialog(
+      title: Text(title),
+      content: Text(message),
+    );
+    showDialog(
+        context:context,
+      builder: (_)=>alertDialog
+    );
   }
 }

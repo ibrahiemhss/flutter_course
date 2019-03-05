@@ -23,7 +23,7 @@ class NoteListState extends State<NoteList> {
   Widget build(BuildContext context) {
     if(noteList==null){
       noteList=List<Note>();
-      updateList();
+      updateListView();
     }
 
     return Scaffold(
@@ -47,36 +47,38 @@ class NoteListState extends State<NoteList> {
     TextStyle titleStyle = Theme.of(context).textTheme.subhead;
     return ListView.builder(
         itemCount: count,
-        itemBuilder: (BuildContext context, int position) {
-          return Card(
-            elevation: 2.0,
-            child: ListTile(
-              leading: CircleAvatar(
-                backgroundColor: getPriorityColor(this.noteList[position].priority),
-                child: getPriorityIcon(this.noteList[position].priority),
-              ),
-              title: Text(
-                this.noteList[position].title,
-                style: titleStyle,
-              ),
-              subtitle: Text(this.noteList[position].date),
-              trailing: GestureDetector(
-                child: Icon(
-                  Icons.delete,
-                  color: Colors.grey,
-                ),
-                onTap: (){
-                  _delete(context, noteList[position]);
-                },
-              ),
+      itemBuilder: (BuildContext context, int position) {
+        return Card(
+          color: Colors.white,
+          elevation: 2.0,
+          child: ListTile(
 
+            leading: CircleAvatar(
+              backgroundColor: getPriorityColor(this.noteList[position].priority),
+              child: getPriorityIcon(this.noteList[position].priority),
+            ),
+
+            title: Text(this.noteList[position].title, style: titleStyle,),
+
+            subtitle: Text(this.noteList[position].date),
+
+            trailing: GestureDetector(
+              child: Icon(Icons.delete, color: Colors.grey,),
               onTap: () {
-                debugPrint('listTile Tapped');
-                navigateToDetails(this.noteList[position],'edit note');
+                _delete(context, noteList[position]);
               },
             ),
-          );
-        });
+
+
+            onTap: () {
+              debugPrint("ListTile Tapped");
+              navigateToDetails(this.noteList[position],'Edit Note');
+            },
+
+          ),
+        );
+      },
+    );
   }
 
   Color getPriorityColor(int priority){
@@ -113,7 +115,7 @@ class NoteListState extends State<NoteList> {
 
     if(result !=0){
       _showSnakeBar(context,'Note Deleted Successfully');
-      updateList();
+      updateListView();
       //TODO AT 7 : 38
     }
   }
@@ -123,32 +125,33 @@ class NoteListState extends State<NoteList> {
     }));
 
    if(result ==  true){
-     updateList();
+     updateListView();
    }
   }
 
 
-  void updateList() {
+  void updateListView() {
 
-    final Future<Database> dbFuture=databaseHelper.initDatabase();
+    final Future<Database> dbFuture = databaseHelper.initializeDatabase();
+    dbFuture.then((database) {
 
-    dbFuture.then((database){
-      Future<List<Note>> noteListFuture=databaseHelper.getNoteList();
-      noteListFuture.then((noteList){
-      setState(() {
-        this.noteList=noteList;
-        this.count=noteList.length;
-
-      });
+      Future<List<Note>> noteListFuture = databaseHelper.getNoteList();
+      noteListFuture.then((noteList) {
+        setState(() {
+          this.noteList = noteList;
+          this.count = noteList.length;
+        });
       });
     });
+  }
+
+  void _showSnakeBar(BuildContext context, String s) {
+
+    final snackBar=SnackBar(content: Text(s),);
+    Scaffold.of(context).showSnackBar(snackBar);
   }
 }
 
 
 
-void _showSnakeBar(BuildContext context, String s) {
 
-  final snackBar=SnackBar(content: Text(s),);
-  Scaffold.of(context).showSnackBar(snackBar);
-}

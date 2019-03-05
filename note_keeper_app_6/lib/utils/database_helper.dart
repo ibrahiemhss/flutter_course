@@ -5,8 +5,8 @@ import 'package:path_provider/path_provider.dart';
 import 'package:note_keeper_app_6/models/note.dart';
 
 class DatabaseHelper {
-  static DatabaseHelper _databaseHelper; //$singleton DatabaseHelper
-  static Database _database;
+  static DatabaseHelper _databaseHelper;    // Singleton DatabaseHelper
+  static Database _database;                // Singleton Database
 
   String noteTable = 'note_table';
   String colId = 'id';
@@ -15,12 +15,12 @@ class DatabaseHelper {
   String colPriority = 'priority';
   String colDate = 'date';
 
+
   DatabaseHelper._createInstance(); //Named constructor to create instance of DatabaseHelper
 
   factory DatabaseHelper() {
-    if (_databaseHelper != null) {
-      _databaseHelper = DatabaseHelper
-          ._createInstance(); //This is executed only once, sigltone object
+    if (_databaseHelper == null) {
+      _databaseHelper = DatabaseHelper._createInstance(); //This is executed only once, sigltone object
 
     }
     return _databaseHelper;
@@ -28,12 +28,12 @@ class DatabaseHelper {
 
   Future<Database> get database async {
     if (_database == null) {
-      _database = await initDatabase();
+      _database = await initializeDatabase();
     }
     return _database;
   }
 
-  Future<Database> initDatabase() async {
+  Future<Database> initializeDatabase() async {
     //Get the directory path for both Android and IOS store database
 
     Directory _directory = await getApplicationDocumentsDirectory();
@@ -41,18 +41,18 @@ class DatabaseHelper {
 
     //Open/create the database at a given path
     var notesDatabase =
-        await openDatabase(path, version: 1, onCreate: _creatDb);
+    await openDatabase(path, version: 1, onCreate: _creatDb);
 
     return notesDatabase;
   }
 
   void _creatDb(Database db, int newVersion) async {
     await db.execute('CREATE TABLE $noteTable'
-        '( $colId INTEGER PRIMARY KEY AUTOINCREMENT,'
-        '  $colTitle TEXT, '
-        '  $colDescription TEXT, '
-        '  $colPriority INTEGER, '
-        '  $colDate TEXT');
+        '($colId INTEGER PRIMARY KEY AUTOINCREMENT, '
+        '$colTitle TEXT, '
+        '$colDescription TEXT, '
+        '$colPriority INTEGER, '
+        '$colDate TEXT)');
   }
 
   //Fetch Operation: Get All note Objects from database
@@ -76,7 +76,7 @@ class DatabaseHelper {
   //Update Operation: update a note Object and save it to database
 
   Future<int> ubdateNote(Note note) async {
-    Database db = await this.database;
+    var db = await this.database;
     var result = await db.update(noteTable, note.toMap(),
         where: '$colId = ?', whereArgs: [note.id]);
     return result;
@@ -85,7 +85,7 @@ class DatabaseHelper {
   //Delete Operation: delete a note Object from database
 
   Future<int> deleteNote(int id) async {
-    Database db = await this.database;
+    var db = await this.database;
     var result = await db.rawDelete('DELETE FROM $noteTable WHERE $colId =$id');
     return result;
   }
@@ -94,18 +94,21 @@ class DatabaseHelper {
   Future<int> getCount() async {
     Database db = await this.database;
     List<Map<String, dynamic>> x =
-        await db.rawQuery('SELECT COUNT (*) from $noteTable');
+    await db.rawQuery('SELECT COUNT (*) from $noteTable');
     var result = Sqflite.firstIntValue(x);
     return result;
   }
+
   //Get the 'Map List' [ List<Map> ] and convert it to Note List [ List<Note> ]
 
-  Future<List<Note>> getNoteList() async{
-    var noteMapList= await getNoteMapList();
-    int count= noteMapList.length;
+  Future<List<Note>> getNoteList() async {
+    var noteMapList = await getNoteMapList(); // Get 'Map List' from database
+    int count = noteMapList
+        .length; // Count the number of map entries in db table
 
-    List<Note> noteList= List<Note>();
-    for (int i =0 ;i<count ;i++){
+    List<Note> noteList = List<Note>();
+    // For loop to create a 'Note List' from a 'Map List'
+    for (int i = 0; i < count; i++) {
       noteList.add(Note.fromMapObject(noteMapList[i]));
     }
 

@@ -16,7 +16,7 @@ class NoteDetails extends StatefulWidget {
 }
 
 class NoteDetailsState extends State<NoteDetails> {
-  static var _priorities = ['high', 'low'];
+  static var _priorities = ['High', 'Low'];
   String appBarTitle;
   Note note;
   DatabaseHelper helper = DatabaseHelper();
@@ -92,7 +92,7 @@ class NoteDetailsState extends State<NoteDetails> {
                 Padding(
                     padding: EdgeInsets.only(top: 15.0, bottom: 15.0),
                     child: TextField(
-                      controller: titleController,
+                      controller: descriptionController,
                       style: textStyle,
                       onChanged: (value) {
                         debugPrint(

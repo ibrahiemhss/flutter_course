@@ -34,12 +34,12 @@ class Note{
 
     }
   }
-  set priority(int value) {
-    if(value>=1 && value <=2){
-      this.priority = value;
-
+  set priority(int newPriority) {
+    if (newPriority >= 1 && newPriority <= 2) {
+      this._priority = newPriority;
     }
   }
+
 
   int get id => _id;
 

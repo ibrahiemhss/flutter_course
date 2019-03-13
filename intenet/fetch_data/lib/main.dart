@@ -1,98 +1,79 @@
+import 'dart:io';
+
+import 'package:http/http.dart';
+
 import 'package:fetch_data/model/model.dart';
 import "package:flutter/material.dart";
 import 'dart:async';
 import 'dart:convert';
-import 'package:http/http.dart' show get;
+import 'package:http/http.dart' show post;
 import 'package:http/http.dart' as http;
 
 void main() => runApp(MaterialApp(
       title: "Hospital Management",
-      home: MyApp(),
+      home: MyHomePage(),
     ));
 
-class MyApp extends StatelessWidget{
-  @override
-  Widget build(BuildContext context) {
-    // TODO: implement build
-    return null;
-  }
 
+class MyHomePage extends StatefulWidget {
+  @override
+  _MyHomePageState createState() => new _MyHomePageState();
 }
-class ListOfData extends StatelessWidget {
-  final List<MyData> listData;
 
-  const ListOfData(this.listData);
+class _MyHomePageState extends State<MyHomePage> {
+  String url = 'http://enjezni.com/fetch_data/getAllCtg.php';
+  List data;
+
+  Future<String> makeRequest() async {
+
+    var queryParameters = {
+      'lang': 'en',
+    };
+    var response = await http
+        .post(
+        Uri.encodeFull(url),
+        body:queryParameters,
+        headers: {"Accept": "application/json"});
+
+    setState(() {
+      var extractdata = json.decode(response.body);
+      data = extractdata["categories"];
+    });
+  }
+
+  @override
+  void initState() {
+    this.makeRequest();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-        itemCount: listData.length,
-        itemBuilder: (context, index) {
-          return createViewItem(listData[index], context);
-        });
-  }
+    return new Scaffold(
+        body: Container(
+          margin: EdgeInsets.symmetric(vertical: 20.0),
+          height: 200.0,
+          child:
 
-  Widget createViewItem(MyData data, BuildContext context) {
-    return new ListTile(
-      title: new Card(
-        elevation: 4.0,
-        child: new Container(
-          decoration: BoxDecoration(border: Border.all(color: Colors.yellow)),
-          padding: EdgeInsets.all(20.0),
-          margin: EdgeInsets.all(2.0),
-          child: Column(
-            children: <Widget>[
-              Padding(
-                child: Image.network(data.imageUrl),
-                padding: EdgeInsets.only(bottom: 8.0),
-              ),
-              Row(
-                children: <Widget>[
-                  Padding(
-                    child: Text(
-                      data.name,
-                      style: new TextStyle(fontWeight: FontWeight.w700),
-                      textAlign: TextAlign.center,
-                    ),
-                    padding: EdgeInsets.all(1.0),),
+          new ListView.builder(
+              itemCount: data == null ? 0 : data.length,
+              itemBuilder: (BuildContext context, i) {
+                return new Card(
+                    child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          Text(data[i]["en_name"]),
+                         CircleAvatar(
+                                  backgroundImage:
+                                  new NetworkImage(data[i]["image"]))
+                        ]));
+              }, scrollDirection: Axis.horizontal
 
-                ],
-              )
-            ],
           ),
-        ),
-      ),
-      onTap: (){
-
-       // var route= new MaterialPageRoute(
-         //   builder:(BuildContext context)=>
-               // new ScreenDetails(value:listData),
-      //  );
-
-       // Navigator.of(context).push(route);
-
-      });
-  }
-
-
-}
-Future<List<MyData>> downloadJSON() async{
-
-  final jsonUrl="http://enjezni.com/fetch_data/getAllCtg.php";
-
-
-
-  final response= await get(jsonUrl,headers: {"lang": "Application/json"});
-
-  if(response.statusCode == 200){
-    List myListData=json.decode(response.body);
-
-    return myListData
-        .map((listData)=>
-    new MyData.fromJson(listData))
-    .toList();
-  }else{
-    throw Exception("error we were not able to successfully download the json data");
+/*
+          child: new ListView.builder(itemBuilder: (context, index){
+            return createViewItem(data,context,index);
+             }, scrollDirection: Axis.horizontal,),*/
+        ));
   }
 
 }
